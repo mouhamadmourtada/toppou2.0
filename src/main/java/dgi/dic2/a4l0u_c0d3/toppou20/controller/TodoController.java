@@ -27,6 +27,8 @@ import dgi.dic2.a4l0u_c0d3.toppou20.model.Todo;
 import dgi.dic2.a4l0u_c0d3.toppou20.repository.TodoRepository;
 
 // @CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "http://localhost:5173")
+
 @PreAuthorize("hasAuthority('CHERCHEUR')")
 @RestController
 @RequestMapping("/api")

@@ -2,21 +2,18 @@ package dgi.dic2.a4l0u_c0d3.toppou20.controller;
 
 
 
-import dgi.dic2.a4l0u_c0d3.toppou20.dto.AuthRequestDTO;
-import dgi.dic2.a4l0u_c0d3.toppou20.dto.JwtResponseDTO;
+import dgi.dic2.a4l0u_c0d3.toppou20.dto.*;
+import dgi.dic2.a4l0u_c0d3.toppou20.exception.BadCredentialsException;
 import dgi.dic2.a4l0u_c0d3.toppou20.model.Role;
 import dgi.dic2.a4l0u_c0d3.toppou20.model.User;
 import dgi.dic2.a4l0u_c0d3.toppou20.repository.RoleRepository;
 import dgi.dic2.a4l0u_c0d3.toppou20.service.JwtService;
-import dgi.dic2.a4l0u_c0d3.toppou20.dto.RegisterRequestDTO;
 import dgi.dic2.a4l0u_c0d3.toppou20.repository.UserRepository;
 //import dgi.dic2.a4l0u_c0d3.toppou20.repository.
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -28,7 +25,7 @@ import java.util.Collections;
 
 
 
-
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 public class AuthController {
 
@@ -57,7 +54,7 @@ public class AuthController {
     }
 
     @PostMapping("api/auth/login")
-    public JwtResponseDTO AuthenticateAndGetToken(@RequestBody AuthRequestDTO authRequestDTO){
+    public AuthResponseDTO AuthenticateAndGetToken(@RequestBody AuthRequestDTO authRequestDTO){
 
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -67,14 +64,16 @@ public class AuthController {
                     )
             );
             if(authentication.isAuthenticated()){
-            return JwtResponseDTO.builder()
-                    .accessToken(jwtService.generateToken(authRequestDTO.getUsername())).build();
+                String token = jwtService.generateToken(authRequestDTO.getUsername());
+                User user = userRepository.findByUsername(authRequestDTO.getUsername()).get();
+            return new AuthResponseDTO(token, user, 200);
             } else {
                 throw new UsernameNotFoundException("invalid user request..!!");
             }
         } catch (AuthenticationException e) {
-            e.printStackTrace();
-            throw new UsernameNotFoundException("invalid user request..!!");
+//            e.printStackTrace();
+            throw new BadCredentialsException("invalid user request..!!");
+
 //            return JwtResponseDTO.builder().accessToken("problème yaa ngay démarrer fin").build();
         }
     }
@@ -108,7 +107,7 @@ public class AuthController {
         String token = jwtService.generateToken(user.getUsername());
 
         // Retourner le token JWT dans la réponse
-        return ResponseEntity.ok(new JwtResponseDTO(token));
+        return ResponseEntity.ok(new RegisterResponseDTO(token, user));
     }
     
 }
