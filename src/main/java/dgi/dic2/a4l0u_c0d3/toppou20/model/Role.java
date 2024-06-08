@@ -1,6 +1,7 @@
 package dgi.dic2.a4l0u_c0d3.toppou20.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -17,7 +18,8 @@ public class Role {
     private String description;
 
 //    @ManyToMany(fetch = FetchType.LAZY)
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<User> users = new HashSet<>();
 
 
