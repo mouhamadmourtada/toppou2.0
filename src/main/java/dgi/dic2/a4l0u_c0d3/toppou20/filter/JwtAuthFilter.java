@@ -24,11 +24,16 @@ import dgi.dic2.a4l0u_c0d3.toppou20.service.UserDetailsServiceImpl;
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    @Autowired
+//    @Autowired
     private JwtService jwtService;
 
-    @Autowired
-    UserDetailsServiceImpl userDetailsServiceImpl;
+//    @Autowired
+    private UserDetailsServiceImpl userDetailsServiceImpl;
+
+    public JwtAuthFilter(JwtService jwtService, UserDetailsServiceImpl userDetailsServiceImpl) {
+        this.jwtService = jwtService;
+        this.userDetailsServiceImpl = userDetailsServiceImpl;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
