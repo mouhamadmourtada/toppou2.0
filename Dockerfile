@@ -1,23 +1,8 @@
-# Utiliser une image Maven pour la construction
-FROM maven:3.8.4-openjdk-17-slim AS build
-WORKDIR /app
+FROM maven:3.8.5-openjdk-17 as build
+COPY . .
+RUN mvn clean package -DskipTests
 
-# Copier le pom.xml pour résoudre les dépendances
-COPY pom.xml .
-RUN mvn dependency:go-offline
-
-# Copier le reste des sources et construire le projet
-COPY src ./src
-RUN mvn package
-
-# Utiliser une image de base OpenJDK pour l'exécution
-FROM openjdk:17-jdk-slim
-
-# Copier le jar construit à partir de la phase de construction précédente
-COPY --from=build /app/target/*.jar /app/app.jar
-
-# Exposer le port sur lequel l'application s'exécute
+FROM openkdk:17.0.1-jdk-slim
+COPY --from=build /target/*.jar app.jar
 EXPOSE 8080
-
-# Démarrer l'application
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
