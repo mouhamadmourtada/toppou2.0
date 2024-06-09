@@ -1,4 +1,3 @@
-
 # Utiliser une image de base OpenJDK
 FROM openjdk:17-jdk-slim
 
