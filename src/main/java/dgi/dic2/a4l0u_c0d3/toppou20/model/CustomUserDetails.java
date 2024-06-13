@@ -13,12 +13,12 @@ import java.util.Optional;
 
 public class CustomUserDetails extends User implements UserDetails {
 
-    private String email;
+    private String username;
     private String password;
     Collection<? extends GrantedAuthority> authorities;
 
     public CustomUserDetails(User byUsername) {
-        this.email = byUsername.getUsername();
+        this.username = byUsername.getUsername();
         this.password= byUsername.getPassword();
         List<GrantedAuthority> auths = new ArrayList<>();
 
@@ -41,7 +41,7 @@ public class CustomUserDetails extends User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override
