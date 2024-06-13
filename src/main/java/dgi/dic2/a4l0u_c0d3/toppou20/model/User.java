@@ -1,49 +1,94 @@
 package dgi.dic2.a4l0u_c0d3.toppou20.model;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+// @Data c'est pour quoi ?
+// @Data est un projet Lombok qui génère automatiquement les méthodes equals, hashCode, toString, les getters et les setters pour tous les champs de la classe.
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+// @Builder c'est pour quoi ?
+// @Builder est un projet Lombok qui génère automatiquement un constructeur qui initialise toutes les propriétés requises et un constructeur qui initialise toutes les propriétés.
 @Entity
 @Table(name = "users")
+@SQLDelete(sql = "UPDATE users SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
 
-
-    @Column(
-            name = "email",
-            unique = true,
-            nullable = false
-    )
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "username",
-            unique = true,
-            nullable = false
-    )
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
 
-    @Column(name = "prenom")
-    private String prenom;
+    @Column(name = "password", nullable = false)
+    @JsonIgnore
+    private String password;
 
     @Column(name = "nom")
     private String nom;
 
+    @Column(name = "prenom")
+    private String prenom;
+
     @Column(name = "date_naissance")
     private Date dateNaissance;
 
+    @Column(name = "lieu_naissance")
+    private String lieuNaissance;
+
+    @Column(name = "adresse")
+    private String adresse;
+
+    @Column(name = "telephone")
+    private String telephone;
+
+    @Column(name = "titre")
+    private String titre;
+
+    @Column(name = "status")
+    private String status;
+
+    @Column(name = "grade")
+    private String grade;
+
+    @Column(name = "is_confirmed", nullable = false, columnDefinition = "boolean default false")
+    private boolean isConfirmed = false;
+
+    @Column(name = "created_at", updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     @JsonIgnore
-    private String password;
+    private Date createdAt;
 
+    @Column(name = "updated_at",
+        nullable = true
+    )
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonIgnore
+    private Date updatedAt;
 
-//    @ManyToMany(fetch = FetchType.EAGER)
+    @Column(name = "deleted", nullable = false)
+    @JsonIgnore
+    private boolean deleted = false;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
@@ -52,97 +97,44 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
+//    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "acteurs")
+    private Set<Projet> projets = new HashSet<>();
+//    private Set<Projet> projets = new HashSet<>();
 
+    @OneToMany(mappedBy = "bailleur")
+    private Set<Projet> projetsBailleurs = new HashSet<>();
+//    les projets dont il est le bailleur
 
-//    private
+    @OneToMany(mappedBy = "chefProjet")
+    private Set<Projet> projetsChefs = new HashSet<>();
+//    les projets dont il est le chef de projet
 
-    public User() {
+    @ManyToMany(mappedBy = "bailleurs")
+    private Set<Financement> financements = new HashSet<>();
+//    les financement dont il a participé
+
+    // Constructors, getters and setters
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = new Date();
     }
 
-    public User(long id, String email, String prenom, String nom, Date dateNaissance) {
-        this.id = id;
-        this.email = email;
-        this.prenom = prenom;
-        this.nom = nom;
-        this.dateNaissance = dateNaissance;
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = new Date();
     }
 
-    public User(String email, String prenom, String nom, Date dateNaissance) {
-//        this.id = id;
-        this.email = email;
-        this.prenom = prenom;
-        this.nom = nom;
-        this.dateNaissance = dateNaissance;
-    }
+    // public User() {
+    // }
 
-    public long getId() {
-        return id;
-    }
+    // public User(String email, String username, String password) {
+    //     this.email = email;
+    //     this.username = username;
+    //     this.password = password;
+    // }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-//    public String getUsername() {
-//        return username;
-//    }
-
-//    public void setUsername(String username) {
-//        this.username = username;
-//    }
-
-    public String getPrenom() {
-        return prenom;
-    }
-
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public Date getDateNaissance() {
-        return dateNaissance;
-    }
-
-    public void setDateNaissance(Date dateNaissance) {
-        this.dateNaissance = dateNaissance;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
+    // Getters and setters
+    // ...
 }
