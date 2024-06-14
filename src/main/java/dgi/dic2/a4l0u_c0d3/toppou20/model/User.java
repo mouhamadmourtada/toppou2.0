@@ -89,6 +89,9 @@ public class User {
     @JsonIgnore
     private boolean deleted = false;
 
+    @Column(name = "actif", nullable = true)
+    private boolean actif = true;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
@@ -126,8 +129,14 @@ public class User {
         this.updatedAt = new Date();
     }
 
+
+
+    public boolean getActif (){
+        return this.actif;
+
     public void setIsConfirmed(boolean isConfirmed){
         this.isConfirmed = isConfirmed;
+
     }
 
     // public User() {
