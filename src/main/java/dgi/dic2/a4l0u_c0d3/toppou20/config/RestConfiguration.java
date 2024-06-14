@@ -1,0 +1,31 @@
+package dgi.dic2.a4l0u_c0d3.toppou20.config;
+
+import dgi.dic2.a4l0u_c0d3.toppou20.model.Role;
+import dgi.dic2.a4l0u_c0d3.toppou20.model.User;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.metamodel.Type;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
+import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+
+
+@Configuration
+public class RestConfiguration implements RepositoryRestConfigurer {
+
+//    @Autowired
+    private EntityManager entityManager;
+
+    public RestConfiguration(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
+    @Override
+    public void configureRepositoryRestConfiguration(
+            RepositoryRestConfiguration config, CorsRegistry cors) {
+        Class[] classes = entityManager.getMetamodel()
+                .getEntities().stream().map(Type::getJavaType).toArray(Class[]::new);
+        config.exposeIdsFor(classes);
+    }
+}

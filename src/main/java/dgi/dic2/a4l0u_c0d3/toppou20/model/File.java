@@ -1,6 +1,5 @@
 package dgi.dic2.a4l0u_c0d3.toppou20.model;
 
-//import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,9 +29,8 @@ public class File {
     @Column(name = "file_type", nullable = false)
     private String fileType;
 
-    @Lob
-    @Column(name = "data", nullable = false)
-    private byte[] data;
+    @Column(name = "file_path", nullable = false) // Champ pour le chemin ou l'URL du fichier
+    private String filePath;
 
     @Column(name = "upload_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
