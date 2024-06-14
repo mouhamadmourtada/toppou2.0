@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface RoleRepository extends CrudRepository <Role, Long> {
     public Optional<Role> findByLibelle(String libelle);
 
+    List<Role> findByLibelleIn(List<String> libelles);
 //    @Query("SELECT u FROM User u JOIN u.roles r WHERE r.libelle = :roleName")
 //    List<User> findByRoleName(@Param("roleName") String roleName);
 //

@@ -126,6 +126,10 @@ public class User {
         this.updatedAt = new Date();
     }
 
+    public void setIsConfirmed(boolean isConfirmed){
+        this.isConfirmed = isConfirmed;
+    }
+
     // public User() {
     // }
 
