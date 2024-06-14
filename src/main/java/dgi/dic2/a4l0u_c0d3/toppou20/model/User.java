@@ -130,8 +130,13 @@ public class User {
     }
 
 
+
     public boolean getActif (){
         return this.actif;
+
+    public void setIsConfirmed(boolean isConfirmed){
+        this.isConfirmed = isConfirmed;
+
     }
 
     // public User() {
