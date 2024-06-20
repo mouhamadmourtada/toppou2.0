@@ -16,6 +16,8 @@ public class CorsConfig {
 
         // Configuration des CORS
         config.setAllowCredentials(true);
+        config.addAllowedOrigin("http://localhost:5173"); // Origine locale
+        config.addAllowedOrigin("https://toppou-front.vercel.app"); // Origine de production
         config.addAllowedOriginPattern("*"); // Permet toutes les origines.
         config.addAllowedHeader("*"); // Permet tous les headers.
         config.addAllowedMethod("*"); // Permet toutes les méthodes HTTP (GET, POST, PUT, DELETE, etc.).
