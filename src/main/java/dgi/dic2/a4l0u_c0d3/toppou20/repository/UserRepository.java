@@ -17,11 +17,16 @@ import java.util.Optional;
 
 //@RepositoryRestResource
 public interface UserRepository extends JpaRepository<User, Long> {
+
     public User findByEmail(String email);
     public Optional<User> findByUsername(String username);
 
-//    @Query("SELECT u FROM User u JOIN u.roles r WHERE r.libelle = :roleName")
-//    List<User> findByRoleName(@Param("roleName") String roleName);
+
+//    public List<User> findByRole(Role role);
+
+
+    @Query("SELECT u FROM User u JOIN u.roles r WHERE r.libelle = :roleName")
+    List<User> findByRoleName(@Param("roleName") String roleName);
 
 
 //    @Query("SELECT u FROM User u JOIN u.roles r WHERE r.libelle IN :roleNames")

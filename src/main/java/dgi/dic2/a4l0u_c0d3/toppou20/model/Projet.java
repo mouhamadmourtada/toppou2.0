@@ -26,11 +26,45 @@ public class Projet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @Column(name = "nom", nullable = false)
     private String nom;
 
     @Column(name = "description", columnDefinition = "text")
     private String description;
+
+    @Column(name = "objectif", columnDefinition = "text")
+    private String objectif;
+
+    @Column(name = "coutPlanifies")
+    private String coutPlanifies;
+
+    @Column(name = "avancement")
+    private int avancement;
+
+    @Column(name = "depenseActuel")
+    private long depenseActuel;
+
+    @Column(name = "dateDebutPrevue")
+    private Date dateDebutPrevue;
+
+    @Column(name = "dateFinPrevue")
+    private Date dateFinPrevue;
+
+    @Column(name = "dateDebutReel")
+    private Date dateDebutReel;
+
+    @Column(name = "dateFinReel")
+    private Date dateFinReel;
+
+    @Column(name = "status")
+    private String status;
+
+    @Column(name = "budgetAlloue")
+    private float budgetAlloue;
+
+    @Column(name = "budgetRestant")
+    private float budgetRestant;
 
     @ManyToMany
     @JoinTable(
@@ -42,6 +76,8 @@ public class Projet {
 
     @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Financement> financements = new HashSet<>();
+
+
 
     @PrePersist
     protected void onCreate() {
