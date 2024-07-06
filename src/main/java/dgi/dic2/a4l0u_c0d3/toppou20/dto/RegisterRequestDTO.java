@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -19,4 +20,17 @@ public class RegisterRequestDTO {
     private String nom;
     private String prenom;
     private Date dateNaissance;
+    private String adresse;
+    private String telephone;
+    private String grade;
+    private String titre;
+    private String lieuNaissance;
+    private String status;
+    private List<String> roles;
+
+
+
+    //    private
+//    private boolean isConfirmed;
+
 }

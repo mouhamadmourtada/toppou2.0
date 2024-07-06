@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.rest.core.annotation.RestResource;
 
 @Data
 // @Data c'est pour quoi ?
@@ -89,6 +90,9 @@ public class User {
     @JsonIgnore
     private boolean deleted = false;
 
+    @Column(name = "actif", nullable = false)
+    private boolean actif = true;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
@@ -124,6 +128,17 @@ public class User {
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = new Date();
+    }
+
+
+
+    public boolean getActif () {
+        return this.actif;
+    }
+
+    public void setIsConfirmed(boolean isConfirmed){
+        this.isConfirmed = isConfirmed;
+
     }
 
     // public User() {

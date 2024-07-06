@@ -33,6 +33,7 @@ public class DatabaseInitializer implements ApplicationRunner {
     }
 
     private boolean checkIfInitialDataInserted() {
+//        return false
         long count = userRepository.count();
         System.out.println("voici la valeur de count" + (count == 0));
         return count == 0;

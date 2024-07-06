@@ -22,7 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
-
+import java.util.HashSet;
+import java.util.List;
 
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -90,22 +91,43 @@ public class AuthController {
         User user = new User();
         user.setUsername(registerRequestDTO.getUsername());
         user.setPassword(passwordEncoder.encode(registerRequestDTO.getPassword()));
+//        user.setPassword(passwordEncoder.encode("passer"));
         user.setEmail(registerRequestDTO.getEmail());
         user.setPrenom(registerRequestDTO.getPrenom());
         user.setNom(registerRequestDTO.getNom());
         user.setDateNaissance(registerRequestDTO.getDateNaissance());
 
+//
+        user.setAdresse(registerRequestDTO.getAdresse());
+        user.setGrade(registerRequestDTO.getGrade());
+        user.setLieuNaissance(registerRequestDTO.getLieuNaissance());
+        user.setStatus(registerRequestDTO.getStatus());
+        user.setTelephone(registerRequestDTO.getTelephone());
+        user.setTitre(registerRequestDTO.getTitre());
+        user.setDeleted(false); // Par défaut, l'utilisateur n'est pas supprimé
+        user.setIsConfirmed(false);
+
         // Ajouter des rôles par défaut (si nécessaire)
-        Role defaultRole = roleRepository.findByLibelle("chercheur")
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-        user.setRoles(Collections.singleton(defaultRole));
+
+        List<String> roleLibelles = registerRequestDTO.getRoles();
+
+// Récupérer les rôles à partir des libellés
+        List<Role> roles = roleRepository.findByLibelleIn(roleLibelles);
+
+        System.out.println(roles);
+        // Vérifier si tous les rôles ont été trouvés
+        if (roles.size() != roleLibelles.size()) {
+            throw new RuntimeException("Error: One or more roles are not found.");
+        }
+//
+//        // Associer les rôles à l'utilisateur
+        user.setRoles(new HashSet<>(roles));
 
         // Sauvegarder l'utilisateur dans la base de données
         userRepository.save(user);
 
         // Générer un token JWT pour le nouvel utilisateur
         String token = jwtService.generateToken(user.getUsername());
-
         // Retourner le token JWT dans la réponse
         return ResponseEntity.ok(new RegisterResponseDTO(token, user));
     }
